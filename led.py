@@ -22,8 +22,6 @@ gpio.output(3,gpio.HIGH) # Assignation d’une valeur à la broche 3 (LED allum�
 gpio.output(3,gpio.LOW) # Assignation d’une valeur à la broche 3 (LED éteinte)
 """
 
-led = True
-
 def main():
     gpio.output(3,gpio.LOW)
     gpio.output(16,gpio.LOW)
@@ -33,15 +31,11 @@ def main():
             blink()
 
 def ledON ():
-    global led
-    led = True
     gpio.output(3,gpio.HIGH)
     gpio.output(16,gpio.LOW)
     return print('La LED est allumée')
 
 def ledOFF ():
-    global led
-    led = False
     gpio.output(3,gpio.LOW)
     gpio.output(16,gpio.HIGH)
     return print('La LED est étinte')
