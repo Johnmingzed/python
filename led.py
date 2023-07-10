@@ -1,5 +1,5 @@
 """
-# Programme domotique avec Raspberry
+Programme domotique avec Raspberry - LED clignotante
 Un bouton permet de faire clignoter la LED et sonner le buzzer.
 Un second bouton permet d'arrêter le programme et réinitialiser le Raspberry
 """
@@ -33,12 +33,10 @@ def main():
 def ledON ():
     gpio.output(3,gpio.HIGH)
     gpio.output(16,gpio.LOW)
-    return print('La LED est allumée')
 
 def ledOFF ():
     gpio.output(3,gpio.LOW)
     gpio.output(16,gpio.HIGH)
-    return print('La LED est étinte')
 
 def blink ():
     while gpio.input(11):

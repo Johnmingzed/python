@@ -1,3 +1,7 @@
+"""
+Script de réinitialisation du Raspberry
+"""
+
 import RPi.GPIO as gpio # Chargement de la bibliothèque pour le Raspberry
 
 # Initialisation du Raspberry
@@ -8,5 +12,6 @@ gpio.setup(7,gpio.IN) # Initialisation de la broche 7 en entrée (Bouton Start -
 gpio.setup(11,gpio.IN) # Initialisation de la broche 7 en entrée (Bouton Reset - Default 1)
 gpio.setup(40,gpio.IN) # Initialisation de la broche 40 en entrée (Photorésistance - Default 1)
 
+# Réinitialisatoin des états du Raspberry et sortie du programme
 gpio.cleanup()
 exit('Raspberry réinitialisé')
