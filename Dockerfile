@@ -1,9 +1,9 @@
 FROM python:3.11
 
-RUN pip install RPi.GPIO
+WORKDIR /usr/src/app/jeu
 
-ADD * /app
+RUN pip install pygame
 
-WORKDIR /app
+ADD . ..
 
-CMD ["python", "led.py"]
+CMD ["python", "jeu.py"]
