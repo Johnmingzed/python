@@ -1,17 +1,19 @@
-# Example file showing a basic pygame "game loop"
+# Simple click game in Python
+# You have to click on bubbles before they leave the screen
 import pygame
 import random
 import os
 
+# Path to filesystem defintions
 main_dir = os.path.split(os.path.abspath(__file__))[0]
 assets_dir = os.path.join(main_dir, "assets")
 
-# pygame setup // Rappel : Coordonnées (0,0) = coin supérieur gauche
+# pygame setup // Reminder : (0,0) = upper left corner
 pygame.init()
 pygame.display.set_caption("Super Bubble 3000")
-screen_width = 1280
-screen_height = 720
-screen = pygame.display.set_mode((screen_width, screen_height), pygame.SCALED)
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SCALED)
 pygame.mouse.set_visible(False)
 
 clock = pygame.time.Clock()
@@ -21,7 +23,7 @@ color_yellow = (255, 162, 0)
 # color_white = (255, 255, 255, 50)
 score = 0
 bubble_count = 0
-BUBBLE_RELOAD = 30 # frames between new bubbles
+BUBBLE_RELOAD = 30  # frames between new bubbles
 BUBBLE_ODDS = 22  # chances a new bubble appears
 bubbles_reload = BUBBLE_RELOAD
 
@@ -34,7 +36,7 @@ def msgDisplay(text):
     font = pygame.font.Font(None, 128)
     message = font.render(text, True, (color_yellow))
     message_position = message.get_rect(
-        centerx=screen_width / 2, centery=screen_height / 2)
+        centerx=SCREEN_WIDTH / 2, centery=SCREEN_HEIGHT / 2)
     screen.blit(message, message_position)
     if paused:
         pygame.display.update()
@@ -72,14 +74,18 @@ class Sight(pygame.sprite.Sprite):
         self.rect.center = position
 
     def fire(self, target):
-        if not self.shooting:
-            self.shooting = True
-            return self.rect.colliderect(target.rect)
+        print("FEU !")
+        for bubble in pygame.sprite.spritecollide(self,target,0):
+            bubble.shooted = True
+            print("Touché :", id(bubble))
+
+
 
 
 class Bubble(pygame.sprite.Sprite):
 
-    VALUE = 15
+    BUBBLE_VALUE = 15
+    BUBBLE_SPEED = -5
 
     def __init__(self, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
@@ -90,40 +96,43 @@ class Bubble(pygame.sprite.Sprite):
         self._initRandomPosition()
         global bubble_count
         bubble_count += 1
-        #print(bubble_count)
+        print('Nouvelle Bulle de taille :', self.size, 'ID :', id(self), "Bubble_count =", bubble_count)
 
     def update(self):
         global score
+        self.touched()
         if self.rect.bottom < 0:
             self._destroy()
-            score -= 10
+            score -= self.BUBBLE_VALUE
         self._flyToTop()
 
     def _destroy(self):
-        self.remove()
         global bubble_count
         bubble_count -= 1
-        print('Destruction :',bubble_count)
+        print('Destruction Bulle ID :', id(self), "Bubble_count =", bubble_count)  # Debug
+        self.kill()
 
     def _randomSize(self):
-        self.size = random.randint(50, 200)
+        self.size = random.randint(50, 300)
+        self.BUBBLE_VALUE = self.size
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.rect = self.image.get_rect()
-        print('Nouvel objet Bulle de taille :', self.size)
 
     def _initRandomPosition(self):
         offset = self.size // 2
-        self.rect.centery = screen_height
-        self.rect.centerx = random.randint(offset, screen_width - offset)
+        self.rect.centery = SCREEN_HEIGHT
+        self.rect.centerx = random.randint(offset, SCREEN_WIDTH - offset)
 
     def _flyToTop(self):
-        new_position = self.rect.move(random.randint(-3, 3), -10)
+        speed = self.BUBBLE_SPEED * (self.size / 300) -2
+        new_position = self.rect.move(random.randint(-3, 3), speed)
         self.rect = new_position
 
     def touched(self):
-        if not self.shooted:
+        global score
+        if self.shooted:
+            score += self.BUBBLE_VALUE
             self._destroy()
-            score += self.VALUE
 
 
 running = True
@@ -147,8 +156,7 @@ while running:
             pause()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if sight.fire(bubble):
-                pass
+            sight.fire(bubbles)
 
     # Create new bubble
     if bubbles_reload:
@@ -161,8 +169,8 @@ while running:
     screen.fill(color_bg)
     all.update()
 
-    # RENDER YOUR GAME HERE
-    if score <= -5000:
+    # Game Over
+    if score <= -1000:
         gameover = True
         msgDisplay('GAME OVER')
     else:
