@@ -24,7 +24,7 @@ color_yellow = (255, 162, 0)
 score = 0
 bubble_count = 0
 BUBBLE_RELOAD = 30  # frames between new bubbles
-BUBBLE_ODDS = 22  # chances a new bubble appears
+BUBBLE_ODDS = 20  # chances a new bubble appears
 bubbles_reload = BUBBLE_RELOAD
 
 font = pygame.font.Font(None, 64)
@@ -86,6 +86,7 @@ class Bubble(pygame.sprite.Sprite):
 
     BUBBLE_VALUE = 15
     BUBBLE_SPEED = -5
+    BUBBLE_SIZE = 50
 
     def __init__(self, *groups):
         pygame.sprite.Sprite.__init__(self, *groups)
@@ -103,7 +104,7 @@ class Bubble(pygame.sprite.Sprite):
         self.touched()
         if self.rect.bottom < 0:
             self._destroy()
-            score -= self.BUBBLE_VALUE
+            score -= self.BUBBLE_VALUE * 2
         self._flyToTop()
 
     def _destroy(self):
@@ -113,7 +114,7 @@ class Bubble(pygame.sprite.Sprite):
         self.kill()
 
     def _randomSize(self):
-        self.size = random.randint(50, 300)
+        self.size = random.randint(1, 6) * self.BUBBLE_SIZE
         self.BUBBLE_VALUE = self.size
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.rect = self.image.get_rect()
