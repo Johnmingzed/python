@@ -4,6 +4,13 @@ import pygame
 import random
 import os
 
+# TO-DO :
+# Add a new game function
+# Add a lives system instead of negative points to trigger Game Over
+# Add righ-button/left-button clickable bubble style
+# Add a diffculty level selector-
+# Clean the code and refactor
+
 # Path to filesystem defintions
 main_dir = os.path.split(os.path.abspath(__file__))[0]
 assets_dir = os.path.join(main_dir, "assets")
