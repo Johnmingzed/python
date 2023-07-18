@@ -1,0 +1,2 @@
+Ceci est un message secret que l'on aimerait chiffrer afin de le sécuriser.
+Il y a plusieurs lignes dans ce fichier.

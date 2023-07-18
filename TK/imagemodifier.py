@@ -1,7 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from rembg import remove
-import rembg
 import os
 
 # Path to filesystem definitions
@@ -16,56 +15,77 @@ def loadImage(name):
 def findRatio(size):
     return size[0] / size[1]
 
+
 def removeBg():
     global img
-    img = remove(img)
+
+    newImg = remove(img)
+    displayImage(newImg)
+
+    print('fin du traitement')
+
+
+def displayImage(img):
+    global imgTk, canvas
+
+    imgTk = ImageTk.PhotoImage(img)
+
+    canvas.delete('all')
+    canvas.create_image(WIDTH/2, HEIGHT/2, image=imgTk)
+    canvas.update()
 
 
 # Preview size
-WIDTH = 400
-HEIGHT = 400
+WIDTH = 720
+HEIGHT = 720
 
 # Init main Window
 root = Tk()
 root.configure(width=1280, height=720)
-root.title = "Super Gimp 3000"
-
-# Largeur
-inputLargeurLabel = Label(root, text="Largeur")
-inputLargeur = Entry(root)
-
-# Hauteur
-inputHauteurLabel = Label(root, text="Hauteur")
-inputHauteur = Entry(root)
-
-# DPI
-inputDpiLabel = Label(root, text="DPI")
-inputDpi = Entry(root)
-
-
-# RemoveBG
-removeButton = Button(root, text="Remove Background", command=removeBg)
-
-
-# Image
+root.title("Super Gimp 3000")
 img = Image.open(loadImage('jonathan.jpg'))
-ratio = findRatio(img.size)
-factor = img.width // WIDTH if ratio >= 1 else img.height // HEIGHT
-img = img.reduce(factor)
-imgTk = ImageTk.PhotoImage(img)
 
 # Canvas
 canvas = Canvas(root, width=WIDTH, height=HEIGHT, bg='#112233')
-canvas.create_image(WIDTH/2, HEIGHT/2, image=imgTk)
+
+# Largeur Field
+inputLargeurLabel = Label(root, text="Largeur")
+imgWidth = img.width if 'img' in globals() else ""
+inputLargeur = Entry(root, width=10)
+inputLargeur.insert(0, imgWidth)
+inputLargeur.update()
+
+# Hauteur Field
+inputHauteurLabel = Label(root, text="Hauteur")
+imgHeight = img.height if 'img' in globals() else ""
+inputHauteur = Entry(root, width=10)
+inputHauteur.insert(0, imgHeight)
+inputHauteur.update()
+
+# DPI Field
+inputDpiLabel = Label(root, text="DPI")
+imgDpi = img.info['dpi'][0] if 'img' in globals() else ""
+inputDpi = Entry(root, width=10)
+inputDpi.insert(0, imgDpi)
+inputDpi.update()
+
+# RemoveBG Button
+removeButton = Button(root, text="Remove Background", command=removeBg)
+
+# Image
+ratio = findRatio(img.size)
+factor = img.width // WIDTH if ratio >= 1 else img.height // HEIGHT
+img = img.reduce(factor)
+displayImage(img)
 
 # Disaplay layout
-inputHauteurLabel.grid(row=1, sticky=E)
-inputLargeurLabel.grid(row=2, sticky=E)
-inputDpiLabel.grid(row=3, sticky=E)
-removeButton.grid(row=4, sticky=E)
-inputHauteur.grid(row=1, column=2)
-inputLargeur.grid(row=2, column=2)
-inputDpi.grid(row=3, column=2)
+inputLargeurLabel.grid(row=1, padx=10, stick=E)
+inputHauteurLabel.grid(row=2, padx=10, stick=E)
+inputDpiLabel.grid(row=3, padx=10, stick=E)
+removeButton.grid(row=4, column=1, columnspan=2, padx=10)
+inputLargeur.grid(row=1, column=2, sticky=W)
+inputHauteur.grid(row=2, column=2, sticky=W)
+inputDpi.grid(row=3, column=2, sticky=W)
 canvas.grid(row=1, column=3, rowspan=4)
 
 
