@@ -41,17 +41,26 @@ class Application(object):
             err = 1		                # erreur : entrée non numérique
         else:
             err = 0
-        if err == 1 or v < 10 or v > 1e11:
+
+        if err == 1 or v < 1 or v > 1e11:
             self.signaleErreur()	    # entrée incorrecte ou hors limites
+        elif v < 10:
+            self.li = [0]*3
+            v *= 10
+            vstring = str(v).zfill(4)
+            self.li[1] = int(vstring[0])
+            self.li[2] = int(vstring[1])
+            # Coloration des 3 lignes :
+            self.coloration()
         else:
             self.li = [0]*3 	                # liste des 3 codes à afficher
-            logv = int(log10(v))	    # partie entière du logarithme
-            ordgr = 10**logv		    # ordre de grandeur
+            logv = int(log10(v))	            # partie entière du logarithme
+            ordgr = 10**logv		            # ordre de grandeur
             # extraction du premier chiffre significatif :
-            self.li[0] = int(v/ordgr)	    # partie entière
+            self.li[0] = int(v/ordgr)	        # partie entière
             decim = v/ordgr - self.li[0]	    # partie décimale
             # extraction du second chiffre significatif :
-            self.li[1] = int(decim*10 + .5)  # +.5 pour arrondir correctement
+            self.li[1] = int(decim*10 + .5)     # +.5 pour arrondir correctement
             # nombre de zéros à accoler aux 2 chiffres significatifs :
             self.li[2] = logv - 1
             # Coloration des 3 lignes :
