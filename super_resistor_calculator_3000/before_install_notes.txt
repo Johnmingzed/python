@@ -1,0 +1,7 @@
+Bonjour, vous êtes sur le point d'installer Super Resistor Calculator 3000 !
+
+Un petit programme de calcul de valeur de résistances électroniques permettant à la fois de définir le code couleur d'une résistance pour une valeur donnée aussi bien que de retrouver ladite valeur à partir du code couleur.
+
+Ce programme se base sur l'exemple fourni par Gérard SWINNEN dans son cours "Apprendre à programmer avec Python 3".
+
+Le code source du présent programme développé en Python3 est disponible sur https://github.com/Johnmingzed/python/blob/main/super_resistor_calculator_3000/resistance.py

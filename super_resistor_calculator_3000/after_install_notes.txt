@@ -1,0 +1,3 @@
+Merci pour votre confiance.
+Ce programme est également ma première tentative de compilation d'un programme pour Windows via le compilateur Pyinstaller et l'installeur Inno Setup.
+C'est historique !
